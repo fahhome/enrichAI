@@ -35,47 +35,30 @@ public class heartbeatserver {
 		      String msgin = "" , msgout = "";
           ss = new ServerSocket(4999);
           s = ss.accept();
-
           din = new DataInputStream(s.getInputStream());
           dout = new DataOutputStream(s.getOutputStream());
-
           BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-
-        //  int length = din.readInt();
-
-          //System.out.println("Input message length is :" + length);
-
-          //if(length > 0){
-            System.out.println("Reading the contents of the packet...");
-            byte[] message = new byte[22];
-            din.readFully(message, 0, 22);
-            System.out.println(toHexString(message));
-        //  }
-
+          System.out.println("Reading the contents of the packet...");
+          byte[] message = new byte[22];
+          din.readFully(message, 0, 22);
+          System.out.println(toHexString(message));
           byte[] messageout = lrp.ToBytes();
-
-          //Thread.sleep(2000);
-          //dout.writeInt(messageout.length);
           Thread.sleep(3000);
           dout.write(messageout);
-
           dout.flush();
-
           s.close();
-
           //Opening port for healthcheck packets
           ss2 = new ServerSocket(5000);
           s2 = ss2.accept();
           din2 = new DataInputStream(s2.getInputStream());
           dout2 = new DataOutputStream(s2.getOutputStream());
           Thread hb =  new Thread(new Runnable(){
-
 		    	@Override
 	    		public void run() {
 				// TODO Auto-generated method stub
-		    	while(true){
-		   		String msgin2 = null;
+		    	  while(true){
+				   	int expectedpacket = 0;
+		   		  String msgin2 = null;
 				   try {
 						 //din2.flush();
 						 int length = 0;
@@ -86,19 +69,34 @@ public class heartbeatserver {
                System.out.println("Reading the contents of the heartbeat request packet...");
                byte[] message = new byte[length];
                din2.readFully(message, 0, message.length);
+
+               byte b1 = message[11];
+               int b1val = Byte.toUnsignedInt(b1);
+							 System.out.println(b1val);
+               if(b1val <= 255  && b1val != expectedpacket){
+								   System.out.println("packets between " + b1val + "and " + expectedpacket + "are lost");
+							 }
+							 else{
+                   byte b2 = message[10];
+									 int high = b1 >= 0 ? b1 : 256 + b1;
+                   int low =  b2 >= 0 ? b2 : 256 + b2;
+                   int res = low | (high << 8);
+
+									 if(res != expectedpacket)
+									    System.out.println("lost packets...");
+							 }
                System.out.println(toHexString(message));
              }
 			  	  } catch (IOException e) {
-					// TODO Auto-generated catch block
-				  	e.printStackTrace();
-				    }
-		          //String  msgout2 = "heartbeat response";
+					     // TODO Auto-generated catch block
+				  	   e.printStackTrace();
+				     }
 		          try {
               Thread.sleep(2000);
 							 byte[] msgout2 = hrp.ToBytes();
 				    	dout2.write(msgout2);
 				      }catch (IOException e) {
-					// TODO Auto-generated catch block
+					    // TODO Auto-generated catch block
 			  		  e.printStackTrace();
 						 }catch (Exception e){
                  System.out.println("Exception occured");
@@ -106,17 +104,16 @@ public class heartbeatserver {
 		          try {
 					     dout2.flush();
 				      }catch (IOException e) {
-					// TODO Auto-generated catch block
+					      // TODO Auto-generated catch block
 					    e.printStackTrace();
-				     }
-			    }
+				        }
+								expectedpacket++;
+			        }
 
-			}
+			      }
 
           });
-
           hb.start();
-
      }
 
 }
