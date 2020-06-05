@@ -1,0 +1,65 @@
+ 228  6  6  2  21  1 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  5 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  9 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  13 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  17 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  21 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  25 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  29 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  33 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  37 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  41 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  45 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  49 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  53 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  21  57 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0 228  6  6  2  22  1 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
