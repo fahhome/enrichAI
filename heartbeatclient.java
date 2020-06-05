@@ -97,8 +97,9 @@ public class heartbeatclient{
 		 	}
 
 			 try {
-				 String msgin = din2.readUTF();
-				 System.out.println("from server :" + msgin);
+          byte[] msgin = new byte[10];
+          din2.readFully(msgin, 0, 10);
+				  System.out.println("from server heartbeat response :" + toHexString(msgin));
        }catch (SocketTimeoutException e) {
           System.out.println("Timeout occured in HeartbeatResponse");
           timeouts++;
@@ -137,7 +138,7 @@ public class heartbeatclient{
 	   });
 
 	   hb.start();
-
+     hb.join();
 	}
 
  }

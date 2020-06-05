@@ -92,27 +92,24 @@ public class heartbeatserver {
 					// TODO Auto-generated catch block
 				  	e.printStackTrace();
 				    }
-		          String  msgout2 = "heartbeat response";
+		          //String  msgout2 = "heartbeat response";
 		          try {
-                try {
-                 Thread.sleep(2000);
-                 } catch (InterruptedException e) {
-                 // TODO Auto-generated catch block
-                 e.printStackTrace();
-                }
-				    	dout2.writeUTF(msgout2);
-				  }catch (IOException e) {
+              Thread.sleep(2000);
+							 byte[] msgout2 = hrp.ToBytes();
+				    	dout2.write(msgout2);
+				      }catch (IOException e) {
 					// TODO Auto-generated catch block
-			  		e.printStackTrace();
-			  	}
-
+			  		  e.printStackTrace();
+						 }catch (Exception e){
+                 System.out.println("Exception occured");
+						 }
 		          try {
-					dout2.flush();
-				} catch (IOException e) {
+					     dout2.flush();
+				      }catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+					    e.printStackTrace();
+				     }
+			    }
 
 			}
 
