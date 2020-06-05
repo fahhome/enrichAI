@@ -1,6 +1,8 @@
 import java.net.*;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.Scanner;
+
 import javax.xml.bind.DatatypeConverter;
 
 public class gpslocationserver {
@@ -56,29 +58,81 @@ public class gpslocationserver {
             public void run(){
                while(true){
                  try{
-									     byte[] messagein = new byte[43];
-										   din2.readFully(messagein, 0, 43);
-										   System.out.println(toHexString(messagein));
-										   for(int i = 4; i<=9 ; i++){
-											      int val = Byte.toUnsignedInt(messagein[i]);
-											      appendStrToFile("gpstracker.txt"," " + val + " ");
-										     }
-                      appendStrToFile("gpstracker.txt",'\n'  + "Latitude is:" + '\n');
-											byte[] bytes = new byte[4];
-											int j = 0;
-											for(int i= 10 ; i<=13;i++)
-											    bytes[j++] = messagein[i] ;
 
-											double result = ByteBuffer.wrap(bytes).getInt()/1800000;
-											appendStrToFile("gpstracker.txt"," " + result);
-											appendStrToFile("gpstracker.txt",'\n'  + "longitude is:" + '\n');
 
-											j = 0;
-											for(int i= 14 ; i<=17;i++)
-													bytes[j++] = messagein[i] ;
 
-											result = ByteBuffer.wrap(bytes).getInt()/1800000;
-                      appendStrToFile("gpstracker.txt"," " + result + '\n');
+
+					  byte[] messagein = new byte[43];
+					  din2.readFully(messagein, 0, 43);
+		   		      System.out.println(toHexString(messagein));
+
+		   		      int mode = Byte.toUnsignedInt(messagein[31]);
+
+		   		      switch(mode){
+
+
+		   		      case 6:
+
+		   		    	   System.out.println("Ephimeral and location need to be uploaded");
+
+						   for(int i = 4; i<=9 ; i++){
+									 int val = Byte.toUnsignedInt(messagein[i]);
+								      appendStrToFile("gpstracker.txt"," " + val + " ");
+						    }
+	                        appendStrToFile("gpstracker.txt",'\n'  + "Latitude is:" + '\n');
+						    byte[] bytes = new byte[4];
+						    int j = 0;
+							for(int i= 10 ; i<=13;i++)
+							  bytes[j++] = messagein[i] ;
+
+						    double result = ByteBuffer.wrap(bytes).getInt()/1800000;
+						    appendStrToFile("gpstracker.txt"," " + result);
+						    appendStrToFile("gpstracker.txt",'\n'  + "longitude is:" + '\n');
+
+						    j = 0;
+						    for(int i= 14 ; i<=17;i++)
+						    bytes[j++] = messagein[i] ;
+						    result = ByteBuffer.wrap(bytes).getInt()/1800000;
+	                        appendStrToFile("gpstracker.txt"," " + result + '\n');
+
+	                        break;
+
+		   		      case 7:
+		   		    	     String str = "";
+		   		    	     Scanner sc = new Scanner(System.in);
+		   		    	     while(!str.equals("p")){
+		   		    	    	 str = sc.next();
+		   		    	     }
+
+		   		    	    appendStrToFile("gpstracker.txt",'\n'  + "Latitude is:" + '\n');
+						    byte[] bytes2 = new byte[4];
+						    int j2 = 0;
+							for(int i= 10 ; i<=13;i++)
+							  bytes2[j2++] = messagein[i] ;
+
+						    double result2 = ByteBuffer.wrap(bytes2).getInt()/1800000;
+						    appendStrToFile("gpstracker.txt"," " + result2);
+						    appendStrToFile("gpstracker.txt",'\n'  + "longitude is:" + '\n');
+
+						    j = 0;
+						    for(int i= 14 ; i<=17;i++)
+						    bytes2[j2++] = messagein[i] ;
+						    result2 = ByteBuffer.wrap(bytes2).getInt()/1800000;
+	                        appendStrToFile("gpstracker.txt"," " + result2 + '\n');
+
+		   		    	     break;
+
+		   		      case 9 :
+		   		    	  break;
+
+		   		      default :
+		   		    	   //last static implementation
+
+		   		       	     break;
+
+
+		   		      }
+
                       Thread.sleep(3000);
                    }catch(Exception e){
                       System.out.println("Exception occured here");
