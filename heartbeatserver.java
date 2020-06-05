@@ -19,6 +19,8 @@ public class heartbeatserver {
 	static DataInputStream din3;
 	static DataOutputStream dout3;
 
+	static int expectedpacket = 0;
+
   public static String toHexString(byte[] array) {
 	    return DatatypeConverter.printHexBinary(array);
 	}
@@ -57,7 +59,7 @@ public class heartbeatserver {
 	    		public void run() {
 				// TODO Auto-generated method stub
 		    	  while(true){
-				   	int expectedpacket = 0;
+
 		   		  String msgin2 = null;
 				   try {
 						 //din2.flush();
@@ -73,6 +75,7 @@ public class heartbeatserver {
                byte b1 = message[11];
                int b1val = Byte.toUnsignedInt(b1);
 							 System.out.println(b1val);
+							 System.out.println(expectedpacket);
                if(b1val <= 255  && b1val != expectedpacket){
 								   System.out.println("packets between " + b1val + "and " + expectedpacket + "are lost");
 							 }
@@ -82,7 +85,7 @@ public class heartbeatserver {
                    int low =  b2 >= 0 ? b2 : 256 + b2;
                    int res = low | (high << 8);
 
-									 if(res != expectedpacket)
+									 if(res != expectedpacket  && b1val != expectedpacket)
 									    System.out.println("lost packets...");
 							 }
                System.out.println(toHexString(message));
