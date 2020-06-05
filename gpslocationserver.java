@@ -44,7 +44,7 @@ public class gpslocationserver {
           BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
           msgin = din.readUTF();
           System.out.println("login request from client : " + msgin);
-          msgout = "login response";
+          msgout = "78 78 05 01 00 05 9F F8 0D 0A";
 					Thread.sleep(2000);
           dout.writeUTF(msgout);
           dout.flush();
@@ -56,8 +56,8 @@ public class gpslocationserver {
             public void run(){
                while(true){
                  try{
-									     byte[] messagein = new byte[25];
-										   din2.readFully(messagein, 0, 25);
+									     byte[] messagein = new byte[43];
+										   din2.readFully(messagein, 0, 43);
 										   System.out.println(toHexString(messagein));
 										   for(int i = 4; i<=9 ; i++){
 											      int val = Byte.toUnsignedInt(messagein[i]);
@@ -78,11 +78,11 @@ public class gpslocationserver {
 													bytes[j++] = messagein[i] ;
 
 											result = ByteBuffer.wrap(bytes).getInt()/1800000;
-                      appendStrToFile("gpstracker.txt"," " + result);
+                      appendStrToFile("gpstracker.txt"," " + result + '\n');
                       Thread.sleep(3000);
                    }catch(Exception e){
                       System.out.println("Exception occured here");
-											
+
                    }
 
                }

@@ -62,4 +62,68 @@ longitude is:
 Latitude is:
  114.0
 longitude is:
+ 525.0 228  6  6  3  23  54 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  24  2 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  24  10 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  24  18 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  24  26 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  31  45 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  31  53 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  32  1 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  32  9 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  32  17 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  32  25 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  32  33 
+Latitude is:
+ 114.0
+longitude is:
+ 525.0
+ 228  6  6  3  32  41 
+Latitude is:
+ 114.0
+longitude is:
  525.0

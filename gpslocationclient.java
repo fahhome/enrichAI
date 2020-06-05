@@ -50,7 +50,7 @@ public class gpslocationclient{
 							 byte[] message = gp.toBytes();
 
               try{
-                 Thread.sleep(4000);
+                 Thread.sleep(8000);
                  dout2.write(message);
                }catch (Exception e) {
                  System.out.println("Exception occured");
