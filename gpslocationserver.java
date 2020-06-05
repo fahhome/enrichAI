@@ -1,5 +1,8 @@
 import java.net.*;
 import java.io.*;
+import java.nio.ByteBuffer;
+import javax.xml.bind.DatatypeConverter;
+
 public class gpslocationserver {
 
 	static ServerSocket ss ;
@@ -22,11 +25,13 @@ public class gpslocationserver {
            out.close();
        }
        catch (IOException e) {
-           System.out.println("exception occoured" + e;
-
-					 
+           System.out.println("exception occoured" + e);
        }
    }
+
+	 public static String toHexString(byte[] array) {
+ 	    return DatatypeConverter.printHexBinary(array);
+ 	}
 
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
@@ -40,6 +45,7 @@ public class gpslocationserver {
           msgin = din.readUTF();
           System.out.println("login request from client : " + msgin);
           msgout = "login response";
+					Thread.sleep(2000);
           dout.writeUTF(msgout);
           dout.flush();
           s.close();
@@ -50,11 +56,11 @@ public class gpslocationserver {
             public void run(){
                while(true){
                  try{
-									   byte[] messagein = new byte[25];
-										 din.readFully(messagein, 0, 25);
+									     byte[] messagein = new byte[25];
+										   din2.readFully(messagein, 0, 25);
 										   System.out.println(toHexString(messagein));
 										   for(int i = 4; i<=9 ; i++){
-											      int val = Byte.toUnsignedInt(byte[i]);
+											      int val = Byte.toUnsignedInt(messagein[i]);
 											      appendStrToFile("gpstracker.txt"," " + val + " ");
 										     }
                       appendStrToFile("gpstracker.txt",'\n'  + "Latitude is:" + '\n');
@@ -73,10 +79,12 @@ public class gpslocationserver {
 
 											result = ByteBuffer.wrap(bytes).getInt()/1800000;
                       appendStrToFile("gpstracker.txt"," " + result);
-
+                      Thread.sleep(3000);
                    }catch(Exception e){
-                      System.out.println("Exception occured");
+                      System.out.println("Exception occured here");
+											
                    }
+
                }
             }
           });

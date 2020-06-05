@@ -7,13 +7,13 @@ public class gpslocationclient{
 
 	public static void main(String[] args)   throws Exception {
 		// TODO Auto-generated method stub
-
-	     GPSRequestPacket gp = new GPSRequestPacket();
+       String msgin = "";
+	     GpsRequestPacket gp = new GpsRequestPacket();
        Socket s = new Socket("localhost",4999);
        DataInputStream din = new DataInputStream(s.getInputStream());
        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	     dout.writeUTF(msgout);
+	     dout.writeUTF("78 78 11 01 03 51 60 80 80 77 92 88 22 03 32 01 01 AA 53 36 0D 0A");
 	     msgin = din.readUTF();
 	     System.out.println("Received login response from server :" + msgin);
 	     Thread.sleep(2000);
@@ -47,11 +47,11 @@ public class gpslocationclient{
 
 							 gp.setDateandtime(infoc);
 
-							 byte[] message = gp.ToBytes();
+							 byte[] message = gp.toBytes();
 
               try{
-                 Thread.sleep(5000);
-                 dout2.writeUTF("Hey There");
+                 Thread.sleep(4000);
+                 dout2.write(message);
                }catch (Exception e) {
                  System.out.println("Exception occured");
                }
