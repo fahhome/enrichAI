@@ -1,14 +1,28 @@
 import java.net.*;
 import java.io.*;
+import javax.xml.bind.DatatypeConverter;
 
 public class client{
 
+	  static int timeouts = 0;
+	  static int reboots = 0;
+
+	  public static String toHexString(byte[] array) {
+		    return DatatypeConverter.printHexBinary(array);
+		}
+
+		public static byte[] toByteArray(String s) {
+		    return DatatypeConverter.parseHexBinary(s);
+		}
 
 	public static void main(String[] args)   throws Exception {
 		// TODO Auto-generated method stub
 
-	     String msgin = "" , msgout = "Login request";
+	   String msgin = "" , msgout = "Login request";
 
+	   LoginRequestPacket lrp = new LoginRequestPacket();
+	   HeartbeatRequestPacket hrp = new HeartbeatRequestPacket();
+	   GpsRequestPacket gp = new GpsRequestPacket();
        Socket s = new Socket("localhost",4999);
 
        DataInputStream din = new DataInputStream(s.getInputStream());
@@ -16,11 +30,12 @@ public class client{
 
        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-	   dout.writeUTF(msgout);
+	   dout.write(lrp.ToBytes());
 
-	   msgin = din.readUTF();
+	   byte[] lmsgresponse = new byte[10];
+	   din.readFully(lmsgresponse, 0, 10);
 
-	   System.out.println("Received login response from server :" + msgin);
+	   System.out.println("Received login response from server :" + toHexString(lmsgresponse));
 
 	   Thread.sleep(2000);
 
@@ -34,24 +49,28 @@ public class client{
 
 		  while(true){
 			try {
-
-				dout2.writeUTF("hbr");
+			    Thread.sleep(2000);
+				dout2.write(hrp.ToBytes());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-        System.out.println("exception");
+                System.out.println("exception");
+				e.printStackTrace();
+			}catch(Exception e){
+				System.out.println("some exception from heart beat request");
+			}
+
+			try {
+				//String msgin = din2.readUTF();
+				byte[] hmsgres = new byte[10];
+				din2.readFully(hmsgres,0,10);
+                System.out.println("From server :" + toHexString(hmsgres));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 			try {
-				String msgin = din2.readUTF();
-        System.out.println("From server :" + msgin);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-				Thread.sleep(8000);
+				Thread.sleep(4000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

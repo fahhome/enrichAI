@@ -1,4 +1,7 @@
 import java.net.*;
+
+import javax.xml.bind.DatatypeConverter;
+
 import java.io.*;
 public class server {
 
@@ -18,9 +21,20 @@ public class server {
 	static DataInputStream din3;
 	static DataOutputStream dout3;
 
+
+	  public static String toHexString(byte[] array) {
+		    return DatatypeConverter.printHexBinary(array);
+		}
+
+		public static byte[] toByteArray(String s) {
+		    return DatatypeConverter.parseHexBinary(s);
+		}
+
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
 
+		  LoginResponsePacket lrp = new LoginResponsePacket();
+		  HeartbeatResponsePacket hrp = new HeartbeatResponsePacket();
 		  String msgin = "" , msgout = "";
           ss = new ServerSocket(4999);
           s = ss.accept();
@@ -28,12 +42,16 @@ public class server {
           dout = new DataOutputStream(s.getOutputStream());
 
           BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-          msgin = din.readUTF();
+          //msgin = din.readUTF();
 
-          System.out.println("login request from client : " + msgin);
+          byte[] lmsgrequest = new byte[22];
+   	      din.readFully(lmsgrequest, 0, 22);
 
-          msgout = "login response";
-          dout.writeUTF(msgout);
+          System.out.println("login request from client : " + toHexString(lmsgrequest));
+
+          //msgout = "login response";
+          Thread.sleep(2000);
+          dout.write(lrp.ToBytes());
           dout.flush();
 
           s.close();
@@ -61,22 +79,23 @@ public class server {
 			public void run() {
 				// TODO Auto-generated method stub
 			while(true){
-				String msgin2 = null;
+				//String msgin2 = null;
 				   try {
-					 msgin2 = din2.readUTF();
-					 System.out.println("from client :" + msgin2);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					 byte[] hmsgreq = new byte[16];
+					 din2.readFully(hmsgreq,0,16);
+					 System.out.println("from client :" + toHexString(hmsgreq));
+				}catch (IOException e) {
 					e.printStackTrace();
 				}
-
-		         String  msgout2 = "heartbeat response";
-
+		        // String  msgout2 = "heartbeat response";
 		          try {
-					dout2.writeUTF(msgout2);
+		        	Thread.sleep(2000);
+					dout2.write(hrp.ToBytes());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}catch(Exception e){
+					System.out.println("some exception while writing heart beat response from adapter");
 				}
 
 		          try {
@@ -108,8 +127,6 @@ public class server {
   					// TODO Auto-generated catch block
   					e.printStackTrace();
   				}
-
-
   		         String  msgout2 = "gps response";
 
   		          try {
