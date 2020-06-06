@@ -1,4 +1,5 @@
 import java.net.*;
+import java.time.LocalDateTime;
 import java.io.*;
 import javax.xml.bind.DatatypeConverter;
 
@@ -83,9 +84,7 @@ public class client{
 
 	   hb.start();
 
-
-
-    Socket s3 = new Socket("localhost",5001);
+       Socket s3 = new Socket("localhost",5001);
 
 	   Thread gps = new Thread(new Runnable(){
 	   DataInputStream din3 = new DataInputStream(s3.getInputStream());
@@ -95,25 +94,33 @@ public class client{
 			// TODO Auto-generated method stub
 		  while(true){
 			try {
-				dout3.writeUTF("gps request");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				LocalDateTime now = LocalDateTime.now();
 
-			try {
-				String msgin = din3.readUTF();
-               System.out.println("from server :" + msgin);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				 byte year = (byte)now.getYear();
+                 byte month = (byte)now.getMonthValue();
+                 byte day = (byte)now.getDayOfMonth();
+                 byte hour = (byte)now.getHour();
+                 byte minute = (byte)now.getMinute();
+                 byte second = (byte)now.getSecond();
+                 byte[] infoc = new byte[6];
 
-			try {
+				 int i = 0;
+
+				 infoc[i++]=year;
+				 infoc[i++]=month;
+				 infoc[i++]=day;
+				 infoc[i++]=hour;
+				 infoc[i++]=minute;
+				 infoc[i++]=second;
+
+				 gp.setDateandtime(infoc);
 				Thread.sleep(4000);
-			} catch (InterruptedException e) {
+				dout3.write(gp.toBytes());
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}catch(Exception e){
+				System.out.println("some exception occured at gps packet request");
 			}
 
 		  }

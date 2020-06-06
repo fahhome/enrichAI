@@ -1,4 +1,5 @@
 import java.net.*;
+import java.nio.ByteBuffer;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -29,6 +30,21 @@ public class server {
 		public static byte[] toByteArray(String s) {
 		    return DatatypeConverter.parseHexBinary(s);
 		}
+
+
+		 public static void appendStrToFile(String fileName,
+                 String str)
+           {
+             try {
+                   BufferedWriter out = new BufferedWriter(
+                   new FileWriter(fileName, true));
+                   out.write(str);
+                   out.close();
+                 }
+             catch (IOException e) {
+                 System.out.println("exception occoured" + e);
+                }
+           }
 
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
@@ -110,7 +126,7 @@ public class server {
 
           });
 
-        shb.start();
+          shb.start();
           Thread sgps =  new Thread(new Runnable(){
 
   			@Override
@@ -120,28 +136,39 @@ public class server {
   				while(true){
   				String msgin2 = null;
   				   try {
-  					 msgin2 = din3.readUTF();
-  			          System.out.println("from client : " + msgin2);
+  					  //msgin2 = din3.readUTF();
+  					  byte[] gmsgreq = new byte[43];
+  					  din3.readFully(gmsgreq, 0 , 43);
+  			          System.out.println("from client : " + toHexString(gmsgreq));
+  			          for(int i = 4; i<=9 ; i++){
+						 int val = Byte.toUnsignedInt(gmsgreq[i]);
+					      appendStrToFile("gpstracker.txt"," " + val + " ");
+			           }
+                     appendStrToFile("gpstracker.txt",'\n'  + "Latitude is:" + '\n');
+			         byte[] bytes = new byte[4];
+			         int j = 0;
+				     for(int i= 10 ; i<=13;i++)
+				     bytes[j++] = gmsgreq[i] ;
 
-  				} catch (IOException e) {
+			         double result = ByteBuffer.wrap(bytes).getInt()/1800000;
+			         appendStrToFile("gpstracker.txt"," " + result);
+			         appendStrToFile("gpstracker.txt",'\n'  + "longitude is:" + '\n');
+
+			         j = 0;
+			         for(int i= 14 ; i<=17;i++)
+			         bytes[j++] = gmsgreq[i] ;
+			         result = ByteBuffer.wrap(bytes).getInt()/1800000;
+                     appendStrToFile("gpstracker.txt"," " + result + '\n');
+
+  				  } catch (IOException e) {
   					// TODO Auto-generated catch block
   					e.printStackTrace();
-  				}
-  		         String  msgout2 = "gps response";
+  				  }catch(Exception e){
 
-  		          try {
-  					dout3.writeUTF(msgout2);
-  				} catch (IOException e) {
-  					// TODO Auto-generated catch block
-  					e.printStackTrace();
-  				}
+  					  System.out.println("Some exception occured at gps response ");
 
-  		          try {
-  					dout3.flush();
-  				} catch (IOException e) {
-  					// TODO Auto-generated catch block
-  					e.printStackTrace();
-  				}
+  				  }
+
   				}
 
   			}
