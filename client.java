@@ -16,7 +16,7 @@ public class client{
 		    return DatatypeConverter.parseHexBinary(s);
 		}
 
-	public static void main(String[] args)   throws Exception {
+  	public static void main(String[] args)   throws Exception {
 		// TODO Auto-generated method stub
 
 	   String msgin = "" , msgout = "Login request";
@@ -24,12 +24,12 @@ public class client{
 	   LoginRequestPacket lrp = new LoginRequestPacket();
 	   HeartbeatRequestPacket hrp = new HeartbeatRequestPacket();
 	   GpsRequestPacket gp = new GpsRequestPacket();
-       Socket s = new Socket("localhost",4999);
+     Socket s = new Socket("localhost",4999);
 
-       DataInputStream din = new DataInputStream(s.getInputStream());
-       DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+     DataInputStream din = new DataInputStream(s.getInputStream());
+     DataOutputStream dout = new DataOutputStream(s.getOutputStream());
 
-       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	   dout.write(lrp.ToBytes());
 
@@ -71,6 +71,24 @@ public class client{
 			}
 
 			try {
+				//Increase the sequence number for the next packet
+				byte[] prev = hrp.getInfo_Serial_number();
+				byte b1 = hrp.getInfo_Serial_number()[1];
+				byte[] b1arr = new byte[1];
+				b1arr[0] = b1;
+				String s = toHexString(b1arr);
+
+				int hexdig = Integer.parseInt(s,16);
+				hexdig++;
+				byte afteradd = (byte) hexdig;
+				prev[1] = afteradd;
+				hrp.setInfo_Serial_number(prev);
+				try {
+				 Thread.sleep(2000);
+				 } catch (InterruptedException e) {
+				 // TODO Auto-generated catch block
+				 e.printStackTrace();
+				}
 				Thread.sleep(4000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -97,12 +115,12 @@ public class client{
 				LocalDateTime now = LocalDateTime.now();
 
 				 byte year = (byte)now.getYear();
-                 byte month = (byte)now.getMonthValue();
-                 byte day = (byte)now.getDayOfMonth();
-                 byte hour = (byte)now.getHour();
-                 byte minute = (byte)now.getMinute();
-                 byte second = (byte)now.getSecond();
-                 byte[] infoc = new byte[6];
+         byte month = (byte)now.getMonthValue();
+         byte day = (byte)now.getDayOfMonth();
+         byte hour = (byte)now.getHour();
+         byte minute = (byte)now.getMinute();
+         byte second = (byte)now.getSecond();
+         byte[] infoc = new byte[6];
 
 				 int i = 0;
 
@@ -113,7 +131,7 @@ public class client{
 				 infoc[i++]=minute;
 				 infoc[i++]=second;
 
-				 gp.setDateandtime(infoc);
+				gp.setDateandtime(infoc);
 				Thread.sleep(4000);
 				dout3.write(gp.toBytes());
 			} catch (IOException e) {
@@ -127,11 +145,7 @@ public class client{
 
 		}
 	   });
-
 	   gps.start();
-
-
-
 	}
 
 }

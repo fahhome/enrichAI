@@ -22,6 +22,8 @@ public class server {
 	static DataInputStream din3;
 	static DataOutputStream dout3;
 
+	static int expectedpacket = 0;
+
 
 	  public static String toHexString(byte[] array) {
 		    return DatatypeConverter.printHexBinary(array);
@@ -99,6 +101,26 @@ public class server {
 				   try {
 					 byte[] hmsgreq = new byte[16];
 					 din2.readFully(hmsgreq,0,16);
+
+					 byte b1 = hmsgreq[11];
+					 int b1val = Byte.toUnsignedInt(b1);
+					 System.out.println(b1val);
+					 System.out.println(expectedpacket);
+					 if(b1val <= 255  && b1val != expectedpacket){
+							 System.out.println("packets between " + b1val + "and " + expectedpacket + "are lost");
+					 }
+					 else{
+							 byte b2 = hmsgreq[10];
+							 int high = b1 >= 0 ? b1 : 256 + b1;
+							 int low =  b2 >= 0 ? b2 : 256 + b2;
+							 int res = low | (high << 8);
+
+							 if(res != expectedpacket  && b1val != expectedpacket)
+									System.out.println("lost packets...");
+					 }
+
+
+
 					 System.out.println("from client healthcheck packet:" + toHexString(hmsgreq));
 			    	}catch (IOException e) {
 					   e.printStackTrace();
