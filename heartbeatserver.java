@@ -95,7 +95,7 @@ public class heartbeatserver {
 				  	   e.printStackTrace();
 				     }
 		          try {
-              Thread.sleep(2000);
+              Thread.sleep(20000); // simulate timout server change
 							 byte[] msgout2 = hrp.ToBytes();
 				    	dout2.write(msgout2);
 				      }catch (IOException e) {

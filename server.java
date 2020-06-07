@@ -99,30 +99,30 @@ public class server {
 				   try {
 					 byte[] hmsgreq = new byte[16];
 					 din2.readFully(hmsgreq,0,16);
-					 System.out.println("from client :" + toHexString(hmsgreq));
-				}catch (IOException e) {
-					e.printStackTrace();
-				}
+					 System.out.println("from client healthcheck packet:" + toHexString(hmsgreq));
+			    	}catch (IOException e) {
+					   e.printStackTrace();
+				   }
 		        // String  msgout2 = "heartbeat response";
 		          try {
 		        	Thread.sleep(2000);
-					dout2.write(hrp.ToBytes());
-				} catch (IOException e) {
+					    dout2.write(hrp.ToBytes());
+			      	} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}catch(Exception e){
-					System.out.println("some exception while writing heart beat response from adapter");
-				}
+				     	e.printStackTrace();
+			      	}catch(Exception e){
+				     	System.out.println("some exception while writing heart beat response from adapter");
+			     	}
 
 		          try {
-					dout2.flush();
-				} catch (IOException e) {
+					    dout2.flush();
+				     } catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+				   	e.printStackTrace();
+				   }
+			    }
 
-			}
+			  }
 
           });
 
@@ -139,7 +139,7 @@ public class server {
   					  //msgin2 = din3.readUTF();
   					  byte[] gmsgreq = new byte[43];
   					  din3.readFully(gmsgreq, 0 , 43);
-  			          System.out.println("from client : " + toHexString(gmsgreq));
+  			          System.out.println("from client gps packet : " + toHexString(gmsgreq));
   			          for(int i = 4; i<=9 ; i++){
 						 int val = Byte.toUnsignedInt(gmsgreq[i]);
 					      appendStrToFile("gpstracker.txt"," " + val + " ");

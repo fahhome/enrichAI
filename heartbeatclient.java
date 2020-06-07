@@ -20,24 +20,23 @@ public class heartbeatclient{
 		// TODO Auto-generated method stub
 
        while(true){
-
-        System.out.println(" Reboot :" + reboots);
+        System.out.println("Number of timouts :" + timeouts);
         if(timeouts >= 3){
            timeouts = 0;
            reboots++;
-           System.out.println("Time to restart the server");
+           System.out.println("Time to restart the server ... Please restart/reboot");
            Thread.sleep(10000);
         }
 
        LoginRequestPacket lrp = new LoginRequestPacket();
        HeartbeatRequestPacket hrp = new HeartbeatRequestPacket();
-       System.out.println(lrp.getProtocol_number());
+       //System.out.println(lrp.getProtocol_number());
 
 	     String msgin = "" , msgout = "Login request";
 
        Socket s = new Socket("localhost",4999);
 
-       s.setSoTimeout(30000);
+       s.setSoTimeout(30000);//Set High so timeout does not occur
 
        DataInputStream din = new DataInputStream(s.getInputStream());
        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
@@ -63,7 +62,7 @@ public class heartbeatclient{
       }
 	     Thread.sleep(2000);
 	     Socket s2 = new Socket("localhost",5000);
-       s2.setSoTimeout(5000);
+       s2.setSoTimeout(2000); // Set Low
 	     Thread hb = new Thread(new Runnable(){
 	     DataInputStream din2 = new DataInputStream(s2.getInputStream());
 	     DataOutputStream dout2 = new DataOutputStream(s2.getOutputStream());

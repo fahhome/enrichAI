@@ -64,7 +64,7 @@ public class client{
 				//String msgin = din2.readUTF();
 				byte[] hmsgres = new byte[10];
 				din2.readFully(hmsgres,0,10);
-                System.out.println("From server :" + toHexString(hmsgres));
+                System.out.println("From server healthcheck response :" + toHexString(hmsgres));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
